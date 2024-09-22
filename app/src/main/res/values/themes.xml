@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/lavender</item>
         <item name="android:windowLightStatusBar">false</item>
+
+        <item name="android:textColorSecondary">@android:color/white</item>
         <!-- Customize your theme here. -->
 
     </style>
@@ -28,6 +30,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/lavender</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.MainActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -42,6 +45,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/lavender</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
         <!-- Customize your theme here. -->
     </style>
 

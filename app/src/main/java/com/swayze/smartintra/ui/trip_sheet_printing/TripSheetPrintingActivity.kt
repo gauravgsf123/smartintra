@@ -13,6 +13,7 @@ import com.example.tscdll.TSCActivity
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
 import com.mpcl.app.ManagePermissions
+import com.swayze.smartintra.R
 import com.swayze.smartintra.databinding.ActivityTripSheetPrintingBinding
 import com.swayze.smartintra.network.Resource
 import com.swayze.smartintra.network.ViewModalFactory
@@ -37,22 +38,29 @@ class TripSheetPrintingActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTripSheetPrintingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.appBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         viewModel = ViewModelProvider(
             this,
             ViewModalFactory(application)
         )[TripSheetViewModel::class.java]
         setObserver()
-
+        managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         binding.ivDownload.setOnClickListener {
-            val body = mapOf<String, String>(
-                "CID" to "SMARTINTRA",
-                "BID" to sharedPreference.getValueString(Constant.BID)!!,
-                "DOCNUMBER" to binding.etTripSheetNo.text.toString()
-            )
-            viewModel.getTripSheet(body)
+            binding.main.hideKeyboard()
+            if(!TextUtils.isEmpty(binding.etTripSheetNo.text.toString())) {
+                val body = mapOf<String, String>(
+                    "CID" to "SMARTINTRA",
+                    "BID" to sharedPreference.getValueString(Constant.BID)!!,
+                    "DOCNUMBER" to binding.etTripSheetNo.text.toString()
+                )
+                viewModel.getTripSheet(body)
+            }else showToast(getString(R.string.enter_trip_sheet_number))
+
         }
         binding.ivPrint.setOnClickListener {
-            //printBarCode()
+            binding.main.hideKeyboard()
             isCamera = true
             managePermissions.checkPermissions()
             selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT

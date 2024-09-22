@@ -5,19 +5,15 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.tscdll.TSCActivity
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
-import com.swayze.smartintra.R
 import com.swayze.smartintra.databinding.ActivitySetupDeviceBinding
-import java.lang.Exception
+
 
 class SetupDeviceActivity : BaseActivity() {
     private val REQUEST_BLUETOOTH_PERMISSIONS = 1
@@ -27,6 +23,10 @@ class SetupDeviceActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySetupDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.appBar.ivHome.setOnClickListener {
+            onBackPressed()
+        }
         checkBluetoothPermissions()
         sharedPreference.save(Constant.MAC_ADDRESS, "00:19:0E:A6:48:AC")
         binding.tvLastConnectedDevice.text = sharedPreference.getValueString(Constant.MAC_ADDRESS)
