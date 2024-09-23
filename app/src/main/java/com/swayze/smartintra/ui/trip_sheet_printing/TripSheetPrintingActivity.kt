@@ -1,10 +1,13 @@
 package com.swayze.smartintra.ui.trip_sheet_printing
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
@@ -34,6 +37,7 @@ class TripSheetPrintingActivity : BaseActivity() {
     private val permissionList = listOf(
         Manifest.permission.CAMERA
     )
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripSheetPrintingBinding.inflate(layoutInflater)
@@ -66,11 +70,24 @@ class TripSheetPrintingActivity : BaseActivity() {
             selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
             startScanning()
         }
+        binding.barCode.setOnClickListener {
+            isCamera = false
+        }
 
         binding.rvStickerListRecyclerview.adapter = TripSheetAdapter().apply {
             itemClick = { scan ->
 
             }
+        }
+
+        binding.barCode.setOnTouchListener { v, event ->
+            v.onTouchEvent(event)
+            val inputMethod: InputMethodManager =
+                v.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (inputMethod != null) {
+                inputMethod.hideSoftInputFromWindow(v.windowToken, 0)
+            }
+            true
         }
 
         binding.barCode.doOnTextChanged { text, start, count, after ->
@@ -99,7 +116,8 @@ class TripSheetPrintingActivity : BaseActivity() {
             when (response) {
                 is Resource.Success -> {
                     ProgressDialog.hideProgressBar()
-                    //tripSheetList = response as MutableList<TripSheetResponse>
+                    tripSheetList.clear()
+                    tripSheetList = response.data as MutableList<TripSheetResponse>
                     response.data?.let {
                         (binding.rvStickerListRecyclerview.adapter as TripSheetAdapter).setItems(
                             it,this
@@ -231,7 +249,7 @@ class TripSheetPrintingActivity : BaseActivity() {
                 binding.barCode.setText("")
             })
             .show()*/
-        showToast("BarCode : \n Barcode Print Done")
+        showToast("BarCode : ${tripSheet?.BarCodeNo}\n Barcode Print Done")
         binding.barCode.setText("")
         //if(isCamera) startScanning()
 

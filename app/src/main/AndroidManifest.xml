@@ -31,7 +31,10 @@
             android:exported="false" />
         <activity
             android:name=".ui.trip_sheet_printing.TripSheetPrintingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".ui.dashboard.DashboardActivity"
             android:exported="false" />
