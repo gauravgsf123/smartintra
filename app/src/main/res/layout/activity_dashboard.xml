@@ -256,7 +256,7 @@
         android:layout_width="@dimen/_180sdp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/lavender"
+        android:background="@drawable/side_nav"
         android:fitsSystemWindows="false"
         app:menu="@menu/drawer_menu"
         app:itemTextAppearance="@style/NavigationDrawerStyle"

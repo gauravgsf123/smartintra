@@ -1,5 +1,6 @@
 package com.swayze.smartintra.ui.login
 
+import android.Manifest
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.annotations.Until
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
+import com.mpcl.app.ManagePermissions
+import com.permissionx.guolindev.PermissionX
 import com.swayze.smartintra.R
 import com.swayze.smartintra.databinding.ActivityLoginBinding
 import com.swayze.smartintra.network.Resource
@@ -22,6 +25,18 @@ import com.swayze.smartintra.util.Utils
 class LoginActivity : BaseActivity(), View.OnClickListener {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var viewModel:LoginViewModel
+    private lateinit var managePermissions : ManagePermissions
+    private val permissionList = listOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.READ_PHONE_STATE,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.BLUETOOTH,
+        Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -30,6 +45,25 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             this,
             ViewModalFactory(application)
         )[LoginViewModel::class.java]
+        /*managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
+        if(!sharedPreference.getValueBoolean(Constant.IS_LOGIN,false)){
+            managePermissions.checkPermissions()
+        }*/
+
+        PermissionX.init(this)
+            .permissions(Manifest.permission.CAMERA,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT)
+            .request { allGranted, grantedList, deniedList ->
+                if (allGranted) {
+                    //Toast.makeText(this, "All permissions are granted", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_SHORT).show()
+                }
+            }
+
         binding.login.setOnClickListener{
             binding.main.hideKeyboard()
             validate()

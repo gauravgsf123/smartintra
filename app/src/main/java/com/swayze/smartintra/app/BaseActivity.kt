@@ -89,7 +89,7 @@ open abstract class BaseActivity : AppCompatActivity() {
     }*/
 
     protected open fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     protected open fun setHeading(resId: Int) {

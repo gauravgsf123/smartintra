@@ -1,10 +1,14 @@
 package com.mpcl.app
 
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
+import com.swayze.smartintra.util.MyAlertDialog
 
 
 class ManagePermissions(val activity: Activity, val list: List<String>, val code:Int) {
@@ -46,7 +50,7 @@ class ManagePermissions(val activity: Activity, val list: List<String>, val code
 
     // Show alert dialog to request permissions
     private fun showAlert() {
-        /*MyAlertDialog(activity,
+        MyAlertDialog(activity,
             "Need permission(s)",
             "Some permissions are required to do the task.",
             "Ok",
@@ -60,14 +64,14 @@ class ManagePermissions(val activity: Activity, val list: List<String>, val code
                 }
 
             }
-        ).show()*/
+        ).show()
     }
 
 
     // Request the permissions at run time
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(activity, list.toTypedArray(), code)
-        /*val permission = deniedPermission()
+        val permission = deniedPermission()
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             // Show an explanation asynchronously
             Toast.makeText(activity, "Please enable the permissions from setting", Toast.LENGTH_SHORT).show()
@@ -77,7 +81,7 @@ class ManagePermissions(val activity: Activity, val list: List<String>, val code
             activity.startActivity(intent)
         } else {
             ActivityCompat.requestPermissions(activity, list.toTypedArray(), code)
-        }*/
+        }
     }
 
 

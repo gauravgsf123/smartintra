@@ -87,7 +87,9 @@ dependencies {
     // If you want to additionally use the CameraX Lifecycle library
     implementation ("androidx.camera:camera-lifecycle:1.3.4")
     // If you want to additionally use the CameraX View class
-    implementation ("androidx.camera:camera-view:1.0.0-alpha20")
+    implementation ("androidx.camera:camera-view:1.3.4")
     // If you want to additionally use the CameraX Extensions library
-    implementation ("androidx.camera:camera-extensions:1.0.0-alpha20")
+    implementation ("androidx.camera:camera-extensions:1.3.4")
+
+    implementation (libs.permissionx)
 }

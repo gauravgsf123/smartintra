@@ -1,6 +1,7 @@
 package com.swayze.smartintra.ui.trip_sheet_printing
 
 import android.Manifest
+import android.R.attr.duration
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -8,10 +9,12 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.tscdll.TSCActivity
 import com.mpcl.app.BaseActivity
 import com.mpcl.app.Constant
@@ -22,7 +25,12 @@ import com.swayze.smartintra.network.Resource
 import com.swayze.smartintra.network.ViewModalFactory
 import com.swayze.smartintra.util.ProgressDialog
 import com.swayze.smartintra.util.qr_code_scanner.QRcodeScanningActivity
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 class TripSheetPrintingActivity : BaseActivity() {
     var TscDll = TSCActivity()
@@ -34,6 +42,9 @@ class TripSheetPrintingActivity : BaseActivity() {
     private var selectedScanningSDK = QRcodeScanningActivity.ScannerSDK.MLKIT
     private var isCamera = false
     private val REQUEST_CAMERA_CAPTURE = 1002
+    private var searchJob: Job? = null
+    private var isPrint = false
+    private var count = 0;
     private val permissionList = listOf(
         Manifest.permission.CAMERA
     )
@@ -92,10 +103,17 @@ class TripSheetPrintingActivity : BaseActivity() {
 
         binding.barCode.doOnTextChanged { text, start, count, after ->
             if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
-                if(findCNote(binding.barCode.text.toString())){
+                searchJob?.cancel()
+                searchJob = lifecycleScope.launch {
+                    delay(50)
+                    if (!TextUtils.isEmpty(binding.barCode.text.toString().trim())) {
+                        findCNote(text.toString().trim())
+                    }
+                }
+                /*if(findCNote(binding.barCode.text.toString())){
                     Log.d("barCode",binding.barCode.text.toString())
                     printBarCode()
-                }
+                }*/
             }
         }
 
@@ -108,6 +126,7 @@ class TripSheetPrintingActivity : BaseActivity() {
             var str = sharedPreference.getValueString("result")
             binding.barCode.setText(str)
             sharedPreference.removeValue("result")
+            isPrint = false
         }
     }
 
@@ -163,25 +182,42 @@ class TripSheetPrintingActivity : BaseActivity() {
         QRcodeScanningActivity.start(this, selectedScanningSDK)
     }
 
-    private fun findCNote(str: String): Boolean {
+    private fun findCNote(str: String) {
         var value = false
-        tripSheetList.forEach lit@ {
-            if(it.BarCodeNo==str.trim()){
-                value =true
-                tripSheet = it
-                it.printDone = true
-                var index = tripSheetList.indexOf(it)
-                tripSheetList[index] = it
-                (binding.rvStickerListRecyclerview.adapter as TripSheetAdapter).setItems(
-                    tripSheetList,this
-                )
-                return@lit
+        lifecycleScope.launch(Dispatchers.Default) {
+            tripSheetList.forEach{
+                if (it.BarCodeNo == str.trim() && !it.printDone!!) {
+                    value = true
+                    tripSheet = it
+                    it.printDone = true
+                    var index = tripSheetList.indexOf(it)
+                    tripSheetList[index] = it
 
+
+                    withContext(Dispatchers.Main) {
+                        (binding.rvStickerListRecyclerview.adapter as TripSheetAdapter).setItems(
+                            tripSheetList,  this@TripSheetPrintingActivity
+                        )
+                        if(!isPrint) printBarCode()
+
+                    }
+
+
+                    //return@lit
+
+                }
+            }
+
+        }
+        if(!value) {
+            runOnUiThread {
+                showToast("Already Print")
             }
         }
 
-        return  value
+        //return  value
     }
+
 
     private fun printBarCode() {
         var macAdd = sharedPreference.getValueString(Constant.MAC_ADDRESS)
@@ -249,7 +285,9 @@ class TripSheetPrintingActivity : BaseActivity() {
                 binding.barCode.setText("")
             })
             .show()*/
-        showToast("BarCode : ${tripSheet?.BarCodeNo}\n Barcode Print Done")
+        showToast("BarCode : ${tripSheet?.BarCodeNo}\n C-Note ${tripSheet?.CNoteNo} Print Done")
+        Log.d("print_count","${count++}")
+        isPrint = true
         binding.barCode.setText("")
         //if(isCamera) startScanning()
 
