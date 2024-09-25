@@ -20,7 +20,6 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var binding: ActivityDashboardBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -32,10 +31,6 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(menu: MenuItem): Boolean {
         when(menu.itemId) {
-            R.id.nav_home->{
-                startNewActivity(DashboardActivity())
-                finish()
-            }
             R.id.trip_sheet_printing->{
                 startNewActivity(TripSheetPrintingActivity())
             }

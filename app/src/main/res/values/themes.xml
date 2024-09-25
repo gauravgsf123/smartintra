@@ -56,6 +56,5 @@
     </style>
 
     <style name="FullScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>
