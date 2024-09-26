@@ -4,9 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:background="@drawable/headerbkg"
     android:layout_height="match_parent"
     tools:context=".ui.SplashActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/side_nav"
+        app:layout_constraintWidth_percent=".4"
+        app:layout_constraintHeight_percent="1.2"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView
         android:layout_width="200dp"
