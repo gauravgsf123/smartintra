@@ -19,8 +19,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.common.util.concurrent.ListenableFuture
-import com.mpcl.app.SharedPreference
 import com.swayze.smartintra.R
+import com.swayze.smartintra.app.SharedPreference
 import com.swayze.smartintra.databinding.ActivityBarcodeScanningBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -149,7 +149,7 @@ class QRcodeScanningActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            delay(1000) // 1 second debounce
+            delay(500) // 1 second debounce
             isProcessingResult = false
         }
     }

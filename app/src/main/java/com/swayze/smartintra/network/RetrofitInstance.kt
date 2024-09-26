@@ -2,8 +2,8 @@ package com.swayze.smartintra.network
 
 import android.content.Context
 import com.google.gson.GsonBuilder
-import com.mpcl.app.Constant
-import com.mpcl.app.MyApp
+import com.swayze.smartintra.app.Constant
+import com.swayze.smartintra.app.MyApp
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

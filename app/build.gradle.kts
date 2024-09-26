@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -51,6 +53,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.firebase.crashlytics)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -92,4 +95,9 @@ dependencies {
     implementation ("androidx.camera:camera-extensions:1.3.4")
 
     implementation (libs.permissionx)
+
+    implementation ("com.google.firebase:firebase-analytics-ktx")
+    // Firebase Crashlytics SDK
+    implementation ("com.google.firebase:firebase-crashlytics-ktx")
+    implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "824104312416",
+    "project_id": "smartintra-eb9a8",
+    "storage_bucket": "smartintra-eb9a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824104312416:android:3d3dae7e661f31e5366d05",
+        "android_client_info": {
+          "package_name": "com.swayze.smartintra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGnoGJBUUj54xr0ib9A17l-81Kw9UbeSk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,6 +8,7 @@ data class TripSheetResponse(@SerializedName("Response"    ) var Response    : S
                              @SerializedName("Company"     ) var Company     : String? = null,
                              @SerializedName("FromCode"    ) var FromCode    : String? = null,
                              @SerializedName("TotalBox"    ) var TotalBox    : String? = null,
+                             @SerializedName("Origin"       ) var Origin    : String? = null,
                              @SerializedName("CNoteNo"     ) var CNoteNo     : String? = null,
                              @SerializedName("ToCode"      ) var ToCode      : String? = null,
                              @SerializedName("BarCodeNo"   ) var BarCodeNo   : String? = null,

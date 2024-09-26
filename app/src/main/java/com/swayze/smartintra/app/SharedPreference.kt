@@ -1,4 +1,4 @@
-package com.mpcl.app
+package com.swayze.smartintra.app
 
 import android.content.Context
 import android.content.SharedPreferences

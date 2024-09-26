@@ -1,7 +1,6 @@
 package com.swayze.smartintra.ui.trip_sheet_printing
 
 import android.Manifest
-import android.R.attr.duration
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
@@ -9,17 +8,16 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.tscdll.TSCActivity
-import com.mpcl.app.BaseActivity
-import com.mpcl.app.Constant
-import com.mpcl.app.ManagePermissions
+import com.swayze.smartintra.app.BaseActivity
+import com.swayze.smartintra.app.Constant
 import com.swayze.smartintra.R
+import com.swayze.smartintra.app.ManagePermissions
 import com.swayze.smartintra.databinding.ActivityTripSheetPrintingBinding
 import com.swayze.smartintra.network.Resource
 import com.swayze.smartintra.network.ViewModalFactory
@@ -30,7 +28,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import java.lang.Exception
 
 class TripSheetPrintingActivity : BaseActivity() {
     var TscDll = TSCActivity()
@@ -43,8 +41,7 @@ class TripSheetPrintingActivity : BaseActivity() {
     private var isCamera = false
     private val REQUEST_CAMERA_CAPTURE = 1002
     private var searchJob: Job? = null
-    private var isPrint = false
-    private var count = 0;
+    private lateinit var adapter :TripSheetAdapter
     private val permissionList = listOf(
         Manifest.permission.CAMERA
     )
@@ -60,6 +57,7 @@ class TripSheetPrintingActivity : BaseActivity() {
             this,
             ViewModalFactory(application)
         )[TripSheetViewModel::class.java]
+        binding.etTripSheetNo.setText("123456")
         setObserver()
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         binding.ivDownload.setOnClickListener {
@@ -84,12 +82,12 @@ class TripSheetPrintingActivity : BaseActivity() {
         binding.barCode.setOnClickListener {
             isCamera = false
         }
-
-        binding.rvStickerListRecyclerview.adapter = TripSheetAdapter().apply {
+        adapter = TripSheetAdapter().apply {
             itemClick = { scan ->
 
             }
         }
+        binding.rvStickerListRecyclerview.adapter =adapter
 
         binding.barCode.setOnTouchListener { v, event ->
             v.onTouchEvent(event)
@@ -103,13 +101,14 @@ class TripSheetPrintingActivity : BaseActivity() {
 
         binding.barCode.doOnTextChanged { text, start, count, after ->
             if(!TextUtils.isEmpty(binding.barCode.text.toString().trim())){
-                searchJob?.cancel()
+                /*searchJob?.cancel()
                 searchJob = lifecycleScope.launch {
-                    delay(50)
+                    delay(50)*/
                     if (!TextUtils.isEmpty(binding.barCode.text.toString().trim())) {
+                        tripSheet = tripSheetList[0]
                         findCNote(text.toString().trim())
                     }
-                }
+               // }
                 /*if(findCNote(binding.barCode.text.toString())){
                     Log.d("barCode",binding.barCode.text.toString())
                     printBarCode()
@@ -126,7 +125,6 @@ class TripSheetPrintingActivity : BaseActivity() {
             var str = sharedPreference.getValueString("result")
             binding.barCode.setText(str)
             sharedPreference.removeValue("result")
-            isPrint = false
         }
     }
 
@@ -183,24 +181,29 @@ class TripSheetPrintingActivity : BaseActivity() {
     }
 
     private fun findCNote(str: String) {
-        var value = false
         lifecycleScope.launch(Dispatchers.Default) {
+            var value = false
+            //ProgressDialog.showProgressBar(this@TripSheetPrintingActivity)
             tripSheetList.forEach{
-                if (it.BarCodeNo == str.trim() && !it.printDone!!) {
-                    value = true
-                    tripSheet = it
-                    it.printDone = true
-                    var index = tripSheetList.indexOf(it)
-                    tripSheetList[index] = it
-
-
-                    withContext(Dispatchers.Main) {
-                        (binding.rvStickerListRecyclerview.adapter as TripSheetAdapter).setItems(
-                            tripSheetList,  this@TripSheetPrintingActivity
-                        )
-                        if(!isPrint) printBarCode()
+                Log.d("findCNote","${it.BarCodeNo} : $str")
+                if (it.BarCodeNo == str.trim() && it.printDone==false) {
+                    //withContext(Dispatchers.Main) {
+                    if(!sharedPreference.getValueString(Constant.MAC_ADDRESS).isNullOrEmpty()) {
+                        value = true
+                        tripSheet = it
+                        it.printDone = true
+                        var index = tripSheetList.indexOf(it)
+                        tripSheetList[index] = it
+                        runOnUiThread {
+                            (binding.rvStickerListRecyclerview.adapter as TripSheetAdapter).setItems(
+                                tripSheetList,  this@TripSheetPrintingActivity
+                            )
+                            printBarCode()
+                        }
 
                     }
+                    else showToast(getString(R.string.please_setup_bluetooth_device))
+                   // }
 
 
                     //return@lit
@@ -209,31 +212,24 @@ class TripSheetPrintingActivity : BaseActivity() {
             }
 
         }
-        if(!value) {
-            runOnUiThread {
-                showToast("Already Print")
-            }
-        }
 
         //return  value
     }
 
 
     private fun printBarCode() {
-        var macAdd = sharedPreference.getValueString(Constant.MAC_ADDRESS)
-        //showToast(macAdd.toString())
-        Log.d("mac_address",macAdd.toString())
         try {
-            TscDll.openport(macAdd) //BT
+            /*TscDll.openport(sharedPreference.getValueString(Constant.MAC_ADDRESS)) //BT
             TscDll.sendcommand("SIZE 76 mm, 50 mm\r\n")
-            TscDll.sendcommand("SPEED 6\r\n")
+            TscDll.sendcommand("SPEED 4\r\n")
             TscDll.sendcommand("DENSITY 12\r\n")
             TscDll.sendcommand("CODEPAGE UTF-8\r\n")
             TscDll.sendcommand("SET TEAR ON\r\n")
+            TscDll.sendcommand("SET GAP 1\r\n")
             TscDll.clearbuffer()
             TscDll.sendcommand("BOX 0,0,866,866,5")
-            TscDll.sendcommand("TEXT 100,300,\"ROMAN.TTF\",0,12,12,@1\r\n")
-            TscDll.printerfont(10, 10, "4", 0, 1, 1, "${tripSheet?.Company}")
+            TscDll.sendcommand("TEXT 100,300,\"ROMAN.TTF\",0,12,12,@1\r\n")*/
+            /*TscDll.printerfont(10, 10, "4", 0, 1, 1, "${tripSheet?.Company}")
             TscDll.printerfont(
                 10,
                 45,
@@ -257,7 +253,7 @@ class TripSheetPrintingActivity : BaseActivity() {
                 "________________________________________________________"
             )
             TscDll.printerfont(20, 140, "2", 0, 1, 1, "Origin")
-            TscDll.printerfont(20, 170, "3", 0, 1, 1, "${tripSheet?.FromCode}")
+            TscDll.printerfont(20, 170, "3", 0, 1, 1, "${tripSheet?.Origin}")
             TscDll.printerfont(360, 140, "2", 0, 1, 1, "Destination")
             TscDll.printerfont(360, 170, "3", 0, 1, 1, "${tripSheet?.Destination}")
             TscDll.printerfont(
@@ -268,27 +264,14 @@ class TripSheetPrintingActivity : BaseActivity() {
                 1,
                 1,
                 "________________________________________________________"
-            )
-            TscDll.barcode(40, 230, "128", 100, 1, 0, 4, 5, "${tripSheet?.BarCodeNo}")
+            )*/
+            /*TscDll.barcode(40, 230, "128", 100, 1, 0, 4, 5, "${tripSheet?.BarCodeNo}")
             TscDll.printlabel(1, 1)
-            TscDll.closeport(5000)
+            TscDll.closeport(5000)*/
         } catch (ex: Exception) {
         }
-
-        /*SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-            .setTitleText(cNote?.BarCodeNo)
-            .setContentText("Barcode print done")
-            .setConfirmButton("ok", SweetAlertDialog.OnSweetClickListener {
-                it.dismiss()
-
-
-                binding.barCode.setText("")
-            })
-            .show()*/
-        showToast("BarCode : ${tripSheet?.BarCodeNo}\n C-Note ${tripSheet?.CNoteNo} Print Done")
-        Log.d("print_count","${count++}")
-        isPrint = true
         binding.barCode.setText("")
+        showToast("Printing : ${tripSheet?.BarCodeNo}")
         //if(isCamera) startScanning()
 
     }

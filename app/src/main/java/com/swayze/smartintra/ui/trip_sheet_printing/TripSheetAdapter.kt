@@ -15,7 +15,8 @@ class TripSheetAdapter: RecyclerView.Adapter<TripSheetAdapter.MyViewHolder>() {
     var itemClick: ((TripSheetResponse) -> Unit)? = null
     private var stockList = listOf<TripSheetResponse>()
     private lateinit var context : Context
-    fun setItems(stockList: List<TripSheetResponse>,context: Context) {
+    @SuppressLint("NotifyDataSetChanged")
+    fun setItems(stockList: List<TripSheetResponse>, context: Context) {
         this.context = context
         this.stockList = stockList
         notifyDataSetChanged()

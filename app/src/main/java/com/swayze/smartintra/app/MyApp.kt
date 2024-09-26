@@ -1,4 +1,4 @@
-package com.mpcl.app
+package com.swayze.smartintra.app
 
 import android.app.Application
 

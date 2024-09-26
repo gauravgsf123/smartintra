@@ -1,11 +1,10 @@
-package com.mpcl.app
+package com.swayze.smartintra.app
 
 import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -16,7 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
+import com.swayze.smartintra.ui.trip_sheet_printing.TripSheetPrintingActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -159,7 +158,7 @@ open abstract class BaseActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.fade_out, R.anim.fade_in)
     }
 
-    protected open fun startNewActivity(activity: Activity) {
+    protected open fun startNewActivity(activity: Class<Activity>) {
         startActivity(Intent(this, activity::class.java))
         //overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }

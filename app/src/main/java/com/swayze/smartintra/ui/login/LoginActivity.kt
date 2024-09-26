@@ -1,6 +1,7 @@
 package com.swayze.smartintra.ui.login
 
 import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -10,11 +11,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.annotations.Until
-import com.mpcl.app.BaseActivity
-import com.mpcl.app.Constant
-import com.mpcl.app.ManagePermissions
+import com.swayze.smartintra.app.BaseActivity
+import com.swayze.smartintra.app.Constant
 import com.permissionx.guolindev.PermissionX
 import com.swayze.smartintra.R
+import com.swayze.smartintra.app.ManagePermissions
 import com.swayze.smartintra.databinding.ActivityLoginBinding
 import com.swayze.smartintra.network.Resource
 import com.swayze.smartintra.network.ViewModalFactory
@@ -45,6 +46,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             this,
             ViewModalFactory(application)
         )[LoginViewModel::class.java]
+
+        binding.username.setText("SMT0002")
+        binding.password.setText("SMT9999")
         /*managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         if(!sharedPreference.getValueBoolean(Constant.IS_LOGIN,false)){
             managePermissions.checkPermissions()
@@ -53,14 +57,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         PermissionX.init(this)
             .permissions(Manifest.permission.CAMERA,
                 Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.BLUETOOTH_SCAN,
-                Manifest.permission.BLUETOOTH_CONNECT)
+                Manifest.permission.BLUETOOTH_ADMIN)
             .request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
                     //Toast.makeText(this, "All permissions are granted", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -98,7 +100,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     sharedPreference.save(Constant.BCITY,response.data.BCITY!!)
                     sharedPreference.save(Constant.EMPNAME,response.data.EMPNAME!!)
                     Toast.makeText(this,"Login Success",Toast.LENGTH_LONG).show()
-                    startNewActivity(DashboardActivity())
+                    startActivity(Intent(this, DashboardActivity::class.java))
                     finish()
                 }
 

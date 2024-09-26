@@ -18,4 +18,5 @@
     <string name="test_device">Test Device</string>
     <string name="setup_device">Setup Device</string>
     <string name="enter_trip_sheet_number">Please enter trip sheet number</string>
+    <string name="please_setup_bluetooth_device">Please setup bluetooth device</string>
 </resources>
