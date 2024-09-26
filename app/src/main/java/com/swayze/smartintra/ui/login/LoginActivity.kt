@@ -47,8 +47,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             ViewModalFactory(application)
         )[LoginViewModel::class.java]
 
-        binding.username.setText("SMT0002")
-        binding.password.setText("SMT9999")
+        //binding.username.setText("SMT0002")
+        //binding.password.setText("SMT9999")
         /*managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         if(!sharedPreference.getValueBoolean(Constant.IS_LOGIN,false)){
             managePermissions.checkPermissions()

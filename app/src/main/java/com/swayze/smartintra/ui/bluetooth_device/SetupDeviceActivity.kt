@@ -10,8 +10,8 @@ import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.tscdll.TSCActivity
-import com.mpcl.app.BaseActivity
-import com.mpcl.app.Constant
+import com.swayze.smartintra.app.BaseActivity
+import com.swayze.smartintra.app.Constant
 import com.swayze.smartintra.databinding.ActivitySetupDeviceBinding
 
 
@@ -87,6 +87,7 @@ class SetupDeviceActivity : BaseActivity() {
     }
 
     private fun printBarCode() {
+        showToast("Printing")
         val macAdd = "00:19:0E:A6:48:AC"//sharedPreference.getValueString(Constant.MAC_ADDRESS)
         Log.d("mac_address", macAdd.toString())
         try {
@@ -141,6 +142,8 @@ class SetupDeviceActivity : BaseActivity() {
         } catch (ex: Exception) {
             Log.d("Device Setup", "This is an error $ex")
         }
+
+        showToast("Print Done")
     }
 
 }

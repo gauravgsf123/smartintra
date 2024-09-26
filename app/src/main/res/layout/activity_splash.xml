@@ -10,10 +10,10 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scaleType="fitXY"
         android:src="@drawable/side_nav"
         app:layout_constraintWidth_percent=".4"
-        app:layout_constraintHeight_percent="1.2"
+        app:layout_constraintHeight_percent="1.5"
+        android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageView

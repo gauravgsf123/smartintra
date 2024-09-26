@@ -30,13 +30,13 @@
                 android:contentInsetLeft="0dp"
                 android:contentInsetEnd="0dp"
                 android:contentInsetRight="0dp"
+                android:fitsSystemWindows="true"
                 app:contentInsetEnd="0dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetRight="0dp"
                 app:contentInsetStart="0dp"
                 app:titleTextColor="@color/white"
-                app:contentInsetStartWithNavigation="0dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                app:contentInsetStartWithNavigation="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -92,8 +92,9 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:text="Powered By : SmartIntra Cloud Technologies"
+                android:text="Powered By : Swayze Technologies"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <androidx.cardview.widget.CardView

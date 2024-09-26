@@ -53,11 +53,15 @@ class TripSheetPrintingActivity : BaseActivity() {
         binding.appBar.ivHome.setOnClickListener {
             onBackPressed()
         }
+
+        if(sharedPreference.getValueString(Constant.MAC_ADDRESS).isNullOrEmpty())
+         showToast(getString(R.string.please_setup_bluetooth_device))
+
         viewModel = ViewModelProvider(
             this,
             ViewModalFactory(application)
         )[TripSheetViewModel::class.java]
-        binding.etTripSheetNo.setText("123456")
+        //binding.etTripSheetNo.setText("123456")
         setObserver()
         managePermissions = ManagePermissions(this, permissionList, Constant.REQUEST_PERMISION)
         binding.ivDownload.setOnClickListener {
@@ -121,7 +125,7 @@ class TripSheetPrintingActivity : BaseActivity() {
     override fun onPostResume() {
         super.onPostResume()
 
-        if(sharedPreference.getValueString("result")?.isNotEmpty() == true){
+        if(!sharedPreference.getValueString("result").isNullOrEmpty()){
             var str = sharedPreference.getValueString("result")
             binding.barCode.setText(str)
             sharedPreference.removeValue("result")
@@ -185,10 +189,9 @@ class TripSheetPrintingActivity : BaseActivity() {
             var value = false
             //ProgressDialog.showProgressBar(this@TripSheetPrintingActivity)
             tripSheetList.forEach{
-                Log.d("findCNote","${it.BarCodeNo} : $str")
                 if (it.BarCodeNo == str.trim() && it.printDone==false) {
                     //withContext(Dispatchers.Main) {
-                    if(!sharedPreference.getValueString(Constant.MAC_ADDRESS).isNullOrEmpty()) {
+
                         value = true
                         tripSheet = it
                         it.printDone = true
@@ -200,9 +203,6 @@ class TripSheetPrintingActivity : BaseActivity() {
                             )
                             printBarCode()
                         }
-
-                    }
-                    else showToast(getString(R.string.please_setup_bluetooth_device))
                    // }
 
 
@@ -218,8 +218,9 @@ class TripSheetPrintingActivity : BaseActivity() {
 
 
     private fun printBarCode() {
+        showToast("Printing : ${tripSheet?.BarCodeNo}")
         try {
-            /*TscDll.openport(sharedPreference.getValueString(Constant.MAC_ADDRESS)) //BT
+            TscDll.openport(sharedPreference.getValueString(Constant.MAC_ADDRESS)) //BT
             TscDll.sendcommand("SIZE 76 mm, 50 mm\r\n")
             TscDll.sendcommand("SPEED 4\r\n")
             TscDll.sendcommand("DENSITY 12\r\n")
@@ -228,8 +229,8 @@ class TripSheetPrintingActivity : BaseActivity() {
             TscDll.sendcommand("SET GAP 1\r\n")
             TscDll.clearbuffer()
             TscDll.sendcommand("BOX 0,0,866,866,5")
-            TscDll.sendcommand("TEXT 100,300,\"ROMAN.TTF\",0,12,12,@1\r\n")*/
-            /*TscDll.printerfont(10, 10, "4", 0, 1, 1, "${tripSheet?.Company}")
+            TscDll.sendcommand("TEXT 100,300,\"ROMAN.TTF\",0,12,12,@1\r\n")
+            TscDll.printerfont(10, 10, "4", 0, 1, 1, "${tripSheet?.Company}")
             TscDll.printerfont(
                 10,
                 45,
@@ -264,14 +265,13 @@ class TripSheetPrintingActivity : BaseActivity() {
                 1,
                 1,
                 "________________________________________________________"
-            )*/
-            /*TscDll.barcode(40, 230, "128", 100, 1, 0, 4, 5, "${tripSheet?.BarCodeNo}")
+            )
+            TscDll.barcode(40, 230, "128", 100, 1, 0, 4, 5, "${tripSheet?.BarCodeNo}")
             TscDll.printlabel(1, 1)
-            TscDll.closeport(5000)*/
+            TscDll.closeport(5000)
         } catch (ex: Exception) {
         }
         binding.barCode.setText("")
-        showToast("Printing : ${tripSheet?.BarCodeNo}")
         //if(isCamera) startScanning()
 
     }
