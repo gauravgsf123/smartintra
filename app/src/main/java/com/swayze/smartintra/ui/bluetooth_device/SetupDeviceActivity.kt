@@ -28,7 +28,7 @@ class SetupDeviceActivity : BaseActivity() {
             onBackPressed()
         }
         checkBluetoothPermissions()
-        sharedPreference.save(Constant.MAC_ADDRESS, "00:19:0E:A6:48:AC")
+        //sharedPreference.save(Constant.MAC_ADDRESS, "00:19:0E:A6:48:AC")
         binding.tvLastConnectedDevice.text = sharedPreference.getValueString(Constant.MAC_ADDRESS)
 
         binding.btnNewAddDevice.setOnClickListener {
@@ -36,11 +36,12 @@ class SetupDeviceActivity : BaseActivity() {
             binding.tvMacId.visibility = View.VISIBLE
         }
         binding.btnAddDevice.setOnClickListener {
-            sharedPreference.save(Constant.MAC_ADDRESS, "00:19:0E:A6:48:AC")
+            sharedPreference.save(Constant.MAC_ADDRESS, binding.tvMacId.text.toString())
             binding.tvLastConnectedDevice.text = sharedPreference.getValueString(Constant.MAC_ADDRESS)!!
         }
         binding.btnTestDevice.setOnClickListener {
             //if (checkBluetoothPermissions()) {
+
                 printBarCode()
             //}
         }
@@ -88,10 +89,10 @@ class SetupDeviceActivity : BaseActivity() {
 
     private fun printBarCode() {
         showToast("Printing")
-        val macAdd = "00:19:0E:A6:48:AC"//sharedPreference.getValueString(Constant.MAC_ADDRESS)
-        Log.d("mac_address", macAdd.toString())
+        sharedPreference.getValueString(Constant.MAC_ADDRESS)
+
         try {
-            TscDll.openport(macAdd) //BT
+            TscDll.openport(sharedPreference.getValueString(Constant.MAC_ADDRESS)) //BT
             TscDll.sendcommand("SIZE 76 mm, 50 mm\r\n")
             TscDll.sendcommand("SPEED 6\r\n")
             TscDll.sendcommand("DENSITY 12\r\n")
