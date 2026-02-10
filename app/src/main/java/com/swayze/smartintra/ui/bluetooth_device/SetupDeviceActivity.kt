@@ -4,12 +4,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.tscdll.TSCActivity
+import com.swayze.smartintra.R
 import com.swayze.smartintra.app.BaseActivity
 import com.swayze.smartintra.app.Constant
 import com.swayze.smartintra.databinding.ActivitySetupDeviceBinding
@@ -36,13 +38,17 @@ class SetupDeviceActivity : BaseActivity() {
             binding.tvMacId.visibility = View.VISIBLE
         }
         binding.btnAddDevice.setOnClickListener {
-            sharedPreference.save(Constant.MAC_ADDRESS, binding.tvMacId.text.toString())
-            binding.tvLastConnectedDevice.text = sharedPreference.getValueString(Constant.MAC_ADDRESS)!!
+            if (!TextUtils.isEmpty(binding.tvMacId.text.toString().trim())){
+                sharedPreference.save(Constant.MAC_ADDRESS, binding.tvMacId.text.toString())
+                binding.tvLastConnectedDevice.text = sharedPreference.getValueString(Constant.MAC_ADDRESS)!!
+            }else showToast(getString(R.string.please_enter_mac_id))
+
         }
         binding.btnTestDevice.setOnClickListener {
             //if (checkBluetoothPermissions()) {
-
-                printBarCode()
+            if(sharedPreference.getValueString(Constant.MAC_ADDRESS).isNullOrEmpty())
+                showToast(getString(R.string.please_setup_bluetooth_device))
+            else printBarCode()
             //}
         }
     }

@@ -1,10 +1,14 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    //id("com.google.devtools.ksp") version "1.5.30-1.0.0"
+    id("com.google.devtools.ksp") //version "2.1.20-1.0.27" apply false
+    /*id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("org.jetbrains.kotlin.kapt")*/
 }
 
 android {
@@ -31,11 +35,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
@@ -54,6 +58,7 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.play.services.mlkit.document.scanner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -100,4 +105,18 @@ dependencies {
     // Firebase Crashlytics SDK
     implementation ("com.google.firebase:firebase-crashlytics-ktx")
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+
+    implementation("com.github.f0ris.sweetalert:library:1.6.2")
+
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    implementation("id.zelory:compressor:3.0.1")
+    /*implementation ("androidx.room:room-runtime:2.8.4")
+    implementation ("androidx.room:room-ktx:2.8.4")
+    implementation ("androidx.room:room-rxjava2:2.8.4")*/
+    //ksp("androidx.room:room-compiler:2.8.4")
+    //kapt ("androidx.room:room-compiler:2.8.4")
 }

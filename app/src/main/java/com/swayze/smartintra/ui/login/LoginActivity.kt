@@ -74,13 +74,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun validate() {
-        binding?.run {
+        binding.run {
             if(TextUtils.isEmpty(username.text.toString())){
                 Toast.makeText(this@LoginActivity,getString(R.string.please_enter_username), Toast.LENGTH_LONG).show()
             }else if(TextUtils.isEmpty(password.text.toString())){
                 Toast.makeText(this@LoginActivity,getString(R.string.please_enter_password), Toast.LENGTH_LONG).show()
             }else {
                 val body = mapOf<String, String>(
+                    "CID" to registerId.text.toString(),
                     "EMPNO" to username.text.toString(),
                     "EMPPASS" to password.text.toString()
                 )
@@ -96,6 +97,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     ProgressDialog.hideProgressBar()
                     sharedPreference.save(Constant.IS_LOGIN,true)
                     sharedPreference.save(Constant.EMP_NO,response.data?.EMPNO!!)
+                    sharedPreference.save(Constant.CID, binding.registerId.text.toString().trim())
                     sharedPreference.save(Constant.BID, response.data.BID!!)
                     sharedPreference.save(Constant.BCITY,response.data.BCITY!!)
                     sharedPreference.save(Constant.EMPNAME,response.data.EMPNAME!!)

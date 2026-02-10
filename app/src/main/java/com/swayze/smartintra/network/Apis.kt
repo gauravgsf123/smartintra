@@ -2,7 +2,17 @@ package com.swayze.smartintra.network
 
 
 import com.swayze.smartintra.ui.login.LoginResponse
+import com.swayze.smartintra.ui.pod_upload.PODDelayReasonResponse
+import com.swayze.smartintra.ui.pod_upload.PodDateLimitResponse
 import com.swayze.smartintra.ui.trip_sheet_printing.TripSheetResponse
+import com.swayze.smartintra.ui.vehicle_load_unload.database.VehicleListData
+import com.swayze.smartintra.ui.vehicle_load_unload.model.DocTypeListResponseModel
+import com.swayze.smartintra.ui.vehicle_load_unload.model.ScanDocDataResponseModel
+import com.swayze.smartintra.ui.vehicle_load_unload.model.ScanDocTotalResponseModel
+import com.swayze.smartintra.ui.vehicle_load_unload.model.SendExtraScanResponseModel
+import com.swayze.smartintra.ui.vehicle_load_unload.model.VehicleLoadRequest
+import com.swayze.smartintra.ui.vehicle_load_unload.model.VehicleResponseModel
+import com.swayze.smartintra.util.APIResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -40,41 +50,7 @@ interface Apis {
                                     @Part("IMEINO") IMEINO: RequestBody?,
                                     @Part("MOBILENO") MOBILENO: RequestBody?): List<APIResponse>
 
-    @Multipart
-    @POST("operation/mAcCopyUpload.htm")
-    suspend fun uploadAcCopyData(@Part file: MultipartBody.Part,
-                                 @Part("CID") cid: RequestBody?,
-                                 @Part("EMPNO") empNo: RequestBody?,
-                                 @Part("MOBILENO") mobileNo: RequestBody?,
-                                 @Part("BID") bid: RequestBody?,
-                                 @Part("DOCKETNO") docketNo: RequestBody?,
-                                 @Part("IMEINO") imeiNo: RequestBody?): List<APIResponse>
 
-    @Multipart
-    @POST("operation/mPodCopyUpload.htm")
-    suspend fun uploadPODCopyData(@Part file: MultipartBody.Part,
-                                  @Part("CID") cid: RequestBody?,
-                                  @Part("EMPNO") empNo: RequestBody?,
-                                  @Part("MOBILENO") mobileNo: RequestBody?,
-                                  @Part("BID") bid: RequestBody?,
-                                  @Part("DOCKETNO") docketNo: RequestBody?,
-                                  @Part("DRSDATE") date: RequestBody?,
-                                  @Part("IMEINO") imeiNo: RequestBody?,
-                                  @Part("STATUSTYPE") statusType: RequestBody?,
-                                  @Part("REASONTYPE") reasonType: RequestBody?,
-                                  @Part("REASONS") reason: RequestBody?,
-                                  @Part("NCNOTENO") cNoteNumber: RequestBody?): List<APIResponse>
-
-    @Multipart
-    @POST("operation/mPodCopyUpload.htm")
-    suspend fun uploadPODCopyData(@Part file: MultipartBody.Part,
-                                  @Part("CID") cid: RequestBody?,
-                                  @Part("EMPNO") empNo: RequestBody?,
-                                  @Part("MOBILENO") mobileNo: RequestBody?,
-                                  @Part("BID") bid: RequestBody?,
-                                  @Part("DOCKETNO") docketNo: RequestBody?,
-                                  @Part("DRSDATE") date: RequestBody?,
-                                  @Part("IMEINO") imeiNo: RequestBody?): List<APIResponse>
 
     *//*@POST("viewAllLocation")
     suspend fun getAllLocation(@Body body: Map<String, String>): AllLocationListModel*//*
@@ -143,8 +119,7 @@ interface Apis {
     @POST("operation/mMobileTrack.htm")
     suspend fun mobileTrack(@QueryMap loginMap: Map<String, String>): Response<List<MobileTrackResponseModel>>
 
-    @POST("operation/mCNoteDrs.htm")
-    suspend fun getLimitDate(@QueryMap body: Map<String, String>): List<PodDateLimitResponse>
+
 
     @POST("operation/pickupRequest.htm")
     suspend fun pickupRequest(@QueryMap body: Map<String, String>): List<PickupResponseModel>
@@ -155,8 +130,6 @@ interface Apis {
     @POST("operation/mSavePickups.htm")
     suspend fun pickupSave(@QueryMap body: Map<String, String>): List<SaveDailyAttendResponseModel>
 
-    @POST("operation/mDelReason.htm")
-    suspend fun delayReason(@QueryMap body: Map<String, String>): List<PODDelayReasonResponse>
     @POST("operation/mPincodeData.htm")
     suspend fun getPinCodeFinder(@QueryMap body: Map<String, String>): List<PinCodeFinderResponseModel>
 
@@ -189,4 +162,74 @@ interface Apis {
 
     @POST("getTripWiseSticker")
     suspend fun getTripSheet(@QueryMap body: Map<String, String>) : Response<List<TripSheetResponse>>
+
+    @GET("getDocType")
+    suspend fun getDocTypeList(@QueryMap loginMap: Map<String, String>): List<DocTypeListResponseModel>
+    @POST("mExtraScan.htm")
+    suspend fun sendExtraScan(@QueryMap loginMap: Map<String, String>): List<SendExtraScanResponseModel>
+    @POST("saveVehicleData")
+    suspend fun uploadNewVehicleScan(@Body request: VehicleLoadRequest): List<ScanDocDataResponseModel>
+    @POST("getDataByDocNo")
+    suspend fun getVehicleDataList(@QueryMap loginMap: Map<String, String>): List<VehicleListData>
+    @POST("mScanDocTotal.htm")
+    suspend fun scanDocTotal(@QueryMap loginMap: Map<String, String>): List<ScanDocTotalResponseModel>
+
+    @Multipart
+    @POST("mAcCopyUpload.htm")
+    suspend fun uploadAcCopyData(@Part file: MultipartBody.Part,
+                                 @Part("CID") cid: RequestBody?,
+                                 @Part("EMPNO") empNo: RequestBody?,
+                                 @Part("MOBILENO") mobileNo: RequestBody?,
+                                 @Part("BID") bid: RequestBody?,
+                                 @Part("DOCKETNO") docketNo: RequestBody?,
+                                 @Part("IMEINO") imeiNo: RequestBody?): List<APIResponse>
+
+    @Multipart
+    @POST("mPodCopyUpload.htm")
+    suspend fun uploadPODCopyData(@Part file: MultipartBody.Part,
+                                  @Part("CID") cid: RequestBody?,
+                                  @Part("EMPNO") empNo: RequestBody?,
+                                  @Part("MOBILENO") mobileNo: RequestBody?,
+                                  @Part("BID") bid: RequestBody?,
+                                  @Part("DOCKETNO") docketNo: RequestBody?,
+                                  @Part("DRSDATE") date: RequestBody?,
+                                  @Part("IMEINO") imeiNo: RequestBody?,
+                                  @Part("STATUSTYPE") statusType: RequestBody?,
+                                  @Part("REASONTYPE") reasonType: RequestBody?,
+                                  @Part("REASONS") reason: RequestBody?,
+                                  @Part("NCNOTENO") cNoteNumber: RequestBody?): List<APIResponse>
+
+    @Multipart
+    @POST("mPodCopyUpload.htm")
+    suspend fun uploadPODCopyData(@Part file: MultipartBody.Part,
+                                  @Part("CID") cid: RequestBody?,
+                                  @Part("EMPNO") empNo: RequestBody?,
+                                  @Part("MOBILENO") mobileNo: RequestBody?,
+                                  @Part("BID") bid: RequestBody?,
+                                  @Part("DOCKETNO") docketNo: RequestBody?,
+                                  @Part("DRSDATE") date: RequestBody?,
+                                  @Part("IMEINO") imeiNo: RequestBody?): List<APIResponse>
+
+    @Multipart
+    @POST("mPodCopyUpload.htm")
+    suspend fun uploadPODCopyData(@Part file: MultipartBody.Part,
+                                  @Part documentOneFilePart: MultipartBody.Part,
+                                  @Part documentTwoFilePart: MultipartBody.Part,
+                                  @Part("CID") cid: RequestBody?,
+                                  @Part("EMPNO") empNo: RequestBody?,
+                                  @Part("MOBILENO") mobileNo: RequestBody?,
+                                  @Part("BID") bid: RequestBody?,
+                                  @Part("DOCKETNO") docketNo: RequestBody?,
+                                  @Part("DRSDATE") date: RequestBody?,
+                                  @Part("IMEINO") imeiNo: RequestBody?,
+                                  @Part("STATUSTYPE") statusType: RequestBody?,
+                                  @Part("REASONTYPE") reasonType: RequestBody?,
+                                  @Part("REASONS") reason: RequestBody?,
+                                  @Part("NCNOTENO") cNoteNumber: RequestBody?): List<APIResponse>
+
+    @POST("operation/mCNoteDrs.htm")
+    suspend fun getLimitDate(@QueryMap body: Map<String, String>): List<PodDateLimitResponse>
+
+    @POST("operation/mDelReason.htm")
+    suspend fun delayReason(@QueryMap body: Map<String, String>): List<PODDelayReasonResponse>
 }

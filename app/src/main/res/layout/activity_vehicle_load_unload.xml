@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.vehicle_load_unload.VehicleLoadUnloadActivity">
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/toolbar" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/reset"
+        app:layout_constraintTop_toBottomOf="@+id/top_bar">
+
+
+        <AutoCompleteTextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+            android:dropDownHeight="wrap_content"
+            android:background="@drawable/edittext_background_rounded"
+            android:drawableEnd="@drawable/down_arrow"
+            android:elevation="6dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:gravity="start|center"
+            android:inputType="none"
+            android:hint="@string/select_option"
+            android:paddingStart="10dp"
+            android:paddingEnd="20dp"
+            android:textDirection="anyRtl"
+            android:textSize="@dimen/_12sdp"
+            android:translationZ="6dp"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/llDocumentNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/type">
+
+
+            <EditText
+                android:id="@+id/documentNo1"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_background_rounded"
+                android:inputType="textCapCharacters"
+                android:maxLength="3"
+                android:paddingStart="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutType"
+                tools:text="GGN" />
+
+
+            <EditText
+                android:id="@+id/documentNo2"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_background_rounded"
+                android:inputType="number"
+                android:maxLength="6"
+                android:paddingStart="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayoutType"
+                tools:text="123456" />
+
+            <EditText
+                android:id="@+id/documentNo3"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="5dp"
+                android:layout_weight=".8"
+                android:background="@drawable/edittext_background_rounded"
+                android:enabled="false"
+                android:focusable="false"
+                android:inputType="textCapCharacters"
+                android:maxLength="2"
+                android:paddingStart="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/documentNo2"
+                tools:text="PR" />
+
+            <EditText
+                android:id="@+id/documentNo4"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="5dp"
+                android:layout_weight="1.5"
+                android:background="@drawable/edittext_background_rounded"
+                android:inputType="number"
+                android:maxLength="7"
+                android:paddingStart="10dp"
+                app:layout_constraintTop_toBottomOf="@+id/documentNo3"
+                tools:text="0000015" />
+            <!--</com.mpcl.custom.RegularTextInputLayout>-->
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/boxNo"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_background_rounded"
+            android:drawableRight="@drawable/barcode"
+            android:inputType="textCapCharacters"
+            android:paddingStart="10dp"
+            android:paddingEnd="20dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/iv_print"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/llDocumentNo"
+            tools:text="GAURAV KUMKAR" />
+
+        <ImageView
+            android:id="@+id/iv_print"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:src="@drawable/camera"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/boxNo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@+id/boxNo" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/boxNo">
+
+
+            <EditText
+                android:id="@+id/totalBox"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_background_rounded"
+                android:focusable="false"
+                android:inputType="textCapCharacters"
+                android:paddingStart="10dp"
+                tools:text="New Delhi" />
+
+            <EditText
+                android:id="@+id/scanBox"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/edittext_background_rounded"
+                android:focusable="false"
+                android:inputType="textCapCharacters"
+                android:paddingStart="10dp"
+                tools:text="New Delhi" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/check"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_background_rounded"
+            android:text="@string/check"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/check">
+
+            <TextView
+                android:id="@+id/totalScan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="/"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/totalScan"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_16sdp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/slash"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_scan_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:gravity="start"
+                android:padding="@dimen/_5sdp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_18sdp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/scan"
+                app:layout_constraintStart_toEndOf="@+id/scan"
+                app:layout_constraintTop_toTopOf="@+id/scan"
+                tools:text="@string/success" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutOne"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/totalScan">
+
+                <TextView
+                    android:id="@+id/sl_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:text="SL No."
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/c_note"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="C Note"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/scan_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Scan Code"
+                    android:textColor="@color/colorPrimary" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutOne" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stockListRecyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/_25sdp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider"
+                tools:listitem="@layout/item_vechicle_load_unload_list" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/reset"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_background_rounded"
+        android:text="@string/new_scan"
+        android:textColor="@color/white"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/view"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_background_rounded"
+        android:text="@string/view"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_weight="1"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/submit"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/reset" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_margin="5dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:background="@drawable/button_background_rounded"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/view" />
+</androidx.constraintlayout.widget.ConstraintLayout>

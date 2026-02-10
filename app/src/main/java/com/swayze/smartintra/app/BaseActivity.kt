@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -15,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.swayze.smartintra.ui.trip_sheet_printing.TripSheetPrintingActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,6 +27,7 @@ open abstract class BaseActivity : AppCompatActivity() {
     protected lateinit var sharedPreference: SharedPreference
     protected lateinit var toolbar: Toolbar
     protected lateinit var TAG:String
+    private lateinit var pDialog: SweetAlertDialog
 
     //private lateinit var pDialog: SweetAlertDialog
     //protected lateinit var binding: ActivityMainBinding
@@ -44,14 +47,32 @@ open abstract class BaseActivity : AppCompatActivity() {
 
         //window.statusBarColor = ContextCompat.getColor(this, R.color.)
 
-        //pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
 
 
+    }
+
+    protected open fun showDialog(value:Boolean=true){
+        pDialog.progressHelper.barColor = Color.parseColor("#C70B0D")
+        pDialog.titleText = "Loading ..."
+        pDialog.setCancelable(value)
+        pDialog.show()
+    }
+
+    protected open fun hideDialog(){
+        pDialog.let { when{ it.isShowing->  pDialog.dismiss() }}
     }
 
     open fun View.hideKeyboard() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    protected open fun showError(title: String, message: String){
+        SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+            .setTitleText(title)
+            .setContentText(message)
+            .show()
     }
 
     /*protected open fun showError(title: String, message: String){
@@ -109,6 +130,7 @@ open abstract class BaseActivity : AppCompatActivity() {
         )
     }
 
+    @SuppressLint("HardwareIds")
     open fun getDeviceIMEIId(context: Context): String? {
         val deviceId: String
         deviceId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

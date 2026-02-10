@@ -18,7 +18,7 @@ class SharedPreference(val context: Context) {
 
         editor.putString(KEY_NAME, text)
 
-        editor!!.commit()
+        editor.commit()
     }
 
     fun save(KEY_NAME: String, value: Int) {
@@ -33,7 +33,16 @@ class SharedPreference(val context: Context) {
 
         val editor: SharedPreferences.Editor = sharedPref.edit()
 
-        editor.putBoolean(KEY_NAME, status!!)
+        editor.putBoolean(KEY_NAME, status)
+
+        editor.commit()
+    }
+
+    fun save(KEY_NAME: String, status: Long) {
+
+        val editor: SharedPreferences.Editor = sharedPref.edit()
+
+        editor.putLong(KEY_NAME, status)
 
         editor.commit()
     }
@@ -52,6 +61,12 @@ class SharedPreference(val context: Context) {
     fun getValueBoolean(KEY_NAME: String, defaultValue: Boolean): Boolean {
 
         return sharedPref.getBoolean(KEY_NAME, defaultValue)
+
+    }
+
+    fun getValueLong(KEY_NAME: String, defaultValue: Long): Long {
+
+        return sharedPref.getLong(KEY_NAME, defaultValue)
 
     }
 

@@ -68,7 +68,8 @@ class TripSheetPrintingActivity : BaseActivity() {
             binding.main.hideKeyboard()
             if(!TextUtils.isEmpty(binding.etTripSheetNo.text.toString())) {
                 val body = mapOf<String, String>(
-                    "CID" to "SMARTINTRA",
+                    //"CID" to "SMARTINTRA",
+                    "CID" to sharedPreference.getValueString(Constant.CID)!!,
                     "BID" to sharedPreference.getValueString(Constant.BID)!!,
                     "DOCNUMBER" to binding.etTripSheetNo.text.toString()
                 )
@@ -185,7 +186,7 @@ class TripSheetPrintingActivity : BaseActivity() {
     }
 
     private fun findCNote(str: String) {
-        lifecycleScope.launch(Dispatchers.Default) {
+        //lifecycleScope.launch(Dispatchers.Default) {
             var value = false
             //ProgressDialog.showProgressBar(this@TripSheetPrintingActivity)
             tripSheetList.forEach{
@@ -211,7 +212,7 @@ class TripSheetPrintingActivity : BaseActivity() {
                 }
             }
 
-        }
+       // }
 
         //return  value
     }
@@ -222,11 +223,10 @@ class TripSheetPrintingActivity : BaseActivity() {
         try {
             TscDll.openport(sharedPreference.getValueString(Constant.MAC_ADDRESS)) //BT
             TscDll.sendcommand("SIZE 76 mm, 50 mm\r\n")
-            TscDll.sendcommand("SPEED 4\r\n")
+            TscDll.sendcommand("SPEED 6\r\n")
             TscDll.sendcommand("DENSITY 12\r\n")
             TscDll.sendcommand("CODEPAGE UTF-8\r\n")
             TscDll.sendcommand("SET TEAR ON\r\n")
-            TscDll.sendcommand("SET GAP 1\r\n")
             TscDll.clearbuffer()
             TscDll.sendcommand("BOX 0,0,866,866,5")
             TscDll.sendcommand("TEXT 100,300,\"ROMAN.TTF\",0,12,12,@1\r\n")

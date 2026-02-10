@@ -19,4 +19,52 @@
     <string name="setup_device">Setup Device</string>
     <string name="enter_trip_sheet_number">Please enter trip sheet number</string>
     <string name="please_setup_bluetooth_device">Please setup bluetooth device</string>
+    <string name="please_enter_mac_id">Please enter mac address</string>
+    <string name="register_id">Register Id</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="vehicle_load_unload">Vehicle L/U</string>
+    <string name="pod_upload">Pod Upload</string>
+    <string name="new_scan">New Scan</string>
+    <string name="view">View</string>
+    <string name="submit">Submit</string>
+    <string name="check">Check</string>
+    <string name="success">Success</string>
+    <string name="select_option">Select Option</string>
+    <string name="select_date">Select Date</string>
+    <string name="new_c_note_number">New C Note Number</string>
+    <string name="click_to_take_photo">Click to take Photo</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
+    <string name="opps">Opps</string>
+    <string name="delivered">Delivered</string>
+    <string name="undelivered">Undelivered</string>
+    <string name="rto">R.T.O</string>
+    <string name="date_card_formate">dd/MM/yyyy</string>
+    <string name="alert_date_select">Select Date</string>
+    <string name="barcode_already_scan">Barcode already scan</string>
+    <string name="wrong_barcode_scan">Wrong barcode scan</string>
+    <string name="data_not_available">Data Not Available</string>
+
+    <string-array name="pickup_update_option">
+        <item>Pickup Done</item>
+        <item>Pickup Not Done</item>
+    </string-array>
+
+    <string-array name="pod_status_type">
+        <item>Delivered</item>
+        <item>Undelivered</item>
+        <item>R.T.O</item>
+    </string-array>
+
+    <string-array name="document_type_option">
+        <item>CNOTE</item>
+        <item>BARCODE</item>
+        <item>INVOICE</item>
+    </string-array>
+
+    <string-array name="delivery_type_option">
+        <item>Internal</item>
+        <item>External</item>
+    </string-array>
 </resources>

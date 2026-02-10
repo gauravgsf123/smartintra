@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="lavender">#8692f7</color>
     <color name="grey">#CACACA</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="red">#F44336</color>
 
 
     <color name="colorPrimary">#8692f7</color>
@@ -20,4 +22,5 @@
     <color name="barcode_reticle_stroke">#ffffff</color>
     <color name="green_light">#A4F57A</color>
     <color name="red_light">#F76257</color>
+    <color name="gray">#C0C0C0</color>
 </resources>

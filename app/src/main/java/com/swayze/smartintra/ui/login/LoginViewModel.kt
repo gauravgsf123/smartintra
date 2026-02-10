@@ -1,5 +1,6 @@
 package com.swayze.smartintra.ui.login
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class LoginViewModel(private val app: Application) :ViewModel() {
+    @SuppressLint("StaticFieldLeak")
     private var mContext: Context = app.applicationContext
     private val repository = LoginRepository()
     private var mLoginResponse = MutableLiveData<Resource<LoginResponse>>()

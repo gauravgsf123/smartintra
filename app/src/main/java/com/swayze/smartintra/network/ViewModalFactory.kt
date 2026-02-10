@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModel
 import com.swayze.smartintra.ui.login.LoginViewModel
+import com.swayze.smartintra.ui.pod_upload.PodUploadViewModel
 import com.swayze.smartintra.ui.trip_sheet_printing.TripSheetViewModel
+import com.swayze.smartintra.ui.vehicle_load_unload.VehicleLoadUnloadModel
 
 /**
  * Created by Gaurav on 08,Sep,2024
@@ -16,6 +18,10 @@ class ViewModalFactory(private val app: Application) : ViewModelProvider.Factory
             return LoginViewModel(app) as T
         }else if (modelClass.isAssignableFrom(TripSheetViewModel::class.java)) {
             return TripSheetViewModel(app) as T
+        }else if (modelClass.isAssignableFrom(VehicleLoadUnloadModel::class.java)) {
+            return VehicleLoadUnloadModel(app) as T
+        }else if (modelClass.isAssignableFrom(PodUploadViewModel::class.java)) {
+            return PodUploadViewModel(app) as T
         }
         /*else if (modelClass.isAssignableFrom(TrackingViewModel::class.java)) {
             return TrackingViewModel() as T

@@ -19,6 +19,7 @@
             android:id="@+id/appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:elevation="@dimen/_5sdp">
 
             <androidx.appcompat.widget.Toolbar
@@ -86,40 +87,254 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBar">
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="33dp"
+                android:layout_height="33dp"
+                android:layout_margin="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profile_placeholder"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView" />
+
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Welcome"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/tvUsername"
+                app:layout_constraintStart_toEndOf="@+id/ivProfile"
+                app:layout_constraintTop_toTopOf="@+id/ivProfile" />
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gaurav Kumar"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintStart_toStartOf="@+id/tvWelcome"
+                app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
+
+            <ImageView
+                android:id="@+id/ivLogout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_logout"
+                app:tint="@color/colorPrimary"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toTopOf="@+id/ivProfile"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfile"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:text="Powered By : Swayze Technologies"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_webview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                app:cardBackgroundColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/ivLogout">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:id="@+id/tvDayAndDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="@+id/ivAttendance"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/ivAttendance"
+                        tools:text="Mon 26 Jan 2026" />
+
+                    <ImageView
+                        android:id="@+id/ivAttendance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/add_camera"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvTimeHour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background"
+                        android:padding="6dp"
+                        android:text="00"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintEnd_toStartOf="@+id/tvDot"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ivAttendance" />
+
+                    <TextView
+                        android:id="@+id/tvDot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text=" : "
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTimeMinute"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tvTimeHour"
+                        app:layout_constraintTop_toTopOf="@+id/tvTimeHour"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvTimeHour"/>
+
+                    <TextView
+                        android:id="@+id/tvTimeMinute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background"
+                        android:padding="6dp"
+                        android:text="00"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tvDot1"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tvDot"
+                        app:layout_constraintTop_toTopOf="@+id/tvTimeHour"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvTimeHour" />
+
+                    <TextView
+                        android:id="@+id/tvDot1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text=" : "
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTimeSecond"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tvTimeMinute"
+                        app:layout_constraintTop_toTopOf="@+id/tvTimeHour"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvTimeHour" />
+
+                    <TextView
+                        android:id="@+id/tvTimeSecond"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_background"
+                        android:padding="6dp"
+                        android:text="00"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"
+                        app:layout_constraintEnd_toStartOf="@+id/tvHrs"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tvDot1"
+                        app:layout_constraintTop_toTopOf="@+id/tvTimeHour"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvTimeHour" />
+
+
+                    <TextView
+                        android:id="@+id/tvHrs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="hrs"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/tvTimeSecond"
+                        app:layout_constraintTop_toTopOf="@+id/tvTimeHour"
+                        app:layout_constraintBottom_toBottomOf="@+id/tvTimeHour" />
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/gray"
+                        app:layout_constraintTop_toBottomOf="@+id/tvTimeHour" />
+
+                    <TextView
+                        android:id="@+id/tvCheckInTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="--:--:--"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+                    <TextView
+                        android:id="@+id/tvCheckOutTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:text="--:--:--"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+                    <TextView
+                        android:id="@+id/tvShiftTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center"
+                        android:text="Shift 07:00 AM - 08:00 PM"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvCheckOutTime" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_vehicle_load_unload"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_10sdp"
                 app:cardUseCompatPadding="true"
                 android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/cv_pickup"
+                app:layout_constraintEnd_toStartOf="@+id/cv_pod_upload"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/ivLogout">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_60sdp"
                         android:layout_gravity="center"
-                        android:src="@drawable/logo" />
+                        app:tint="@color/colorPrimary"
+                        android:src="@drawable/vehicel_load_unload" />
 
                     <TextView
                         android:id="@+id/tv_webview"
@@ -128,7 +343,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:padding="@dimen/_10sdp"
-                        android:text="@string/app_name"
+                        android:text="@string/vehicle_load_unload"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_16sdp" />
                 </LinearLayout>
@@ -136,7 +351,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_pickup"
+                android:id="@+id/cv_pod_upload"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -145,19 +360,21 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/cv_webview"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toEndOf="@+id/cv_vehicle_load_unload"
+                app:layout_constraintTop_toBottomOf="@+id/ivLogout">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="@dimen/_60sdp"
                         android:layout_height="@dimen/_60sdp"
                         android:layout_gravity="center"
-                        android:src="@drawable/logo" />
+                        app:tint="@color/colorPrimary"
+                        android:src="@drawable/pod_upload" />
 
                     <TextView
                         android:id="@+id/tv_pickup"
@@ -165,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="@dimen/_10sdp"
-                        android:text="@string/app_name"
+                        android:text="@string/pod_upload"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_16sdp" />
 
@@ -183,7 +400,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/cv_pincode_finder"
-                app:layout_constraintTop_toBottomOf="@+id/cv_webview">
+                app:layout_constraintTop_toBottomOf="@+id/cv_vehicle_load_unload">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -219,7 +436,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/cv_todo"
-                app:layout_constraintTop_toBottomOf="@+id/cv_webview">
+                app:layout_constraintTop_toBottomOf="@+id/cv_vehicle_load_unload">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -260,6 +477,7 @@
         android:background="@drawable/side_nav"
         android:fitsSystemWindows="false"
         app:menu="@menu/drawer_menu"
+        android:visibility="gone"
         app:itemTextAppearance="@style/NavigationDrawerStyle"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white">
