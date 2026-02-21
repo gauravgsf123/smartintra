@@ -45,6 +45,8 @@
     <string name="barcode_already_scan">Barcode already scan</string>
     <string name="wrong_barcode_scan">Wrong barcode scan</string>
     <string name="data_not_available">Data Not Available</string>
+    <string name="your_attendance_done">Your Attendance Done</string>
+    <string name="error">Error</string>
 
     <string-array name="pickup_update_option">
         <item>Pickup Done</item>

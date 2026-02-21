@@ -8,8 +8,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
+import java.util.Locale
 
 object Utils {
 
@@ -50,6 +53,26 @@ object Utils {
     fun getDate(format: String): String {
         val sdf = SimpleDateFormat(format)
         return sdf.format(Date());
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getDayFromDate(dateTime: String, format: String):String {
+        val inputFormat = SimpleDateFormat(format, Locale.getDefault())
+        val date = inputFormat.parse(dateTime)
+        val sdf  = SimpleDateFormat("EEEE, dd MMM yyyy"); // the format of your date
+        return sdf.format(date)
+    }
+
+    fun getTimeInMillis(dateTime: String,format: String): Long {
+        //val dateTimeString = "19/02/2026 22:53:10"
+        val formatter = DateTimeFormatter.ofPattern(format)
+
+        val localDateTime = LocalDateTime.parse(dateTime, formatter)
+
+        return localDateTime
+            .atZone(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
     }
 
     fun milliseconds(date: String?): Long {

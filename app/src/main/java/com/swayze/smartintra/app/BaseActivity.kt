@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.swayze.smartintra.ui.trip_sheet_printing.TripSheetPrintingActivity
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -165,9 +167,9 @@ open abstract class BaseActivity : AppCompatActivity() {
         return deviceUniqueIdentifier
     }
 
-    /*fun getPart(filed: String): RequestBody {
+    fun getPart(filed: String): RequestBody {
         return filed.let { RequestBody.create("text/plain".toMediaTypeOrNull(), it) }
-    }*/
+    }
 
 
     fun TextView?.getText(): String = this?.text?.toString() ?: ""

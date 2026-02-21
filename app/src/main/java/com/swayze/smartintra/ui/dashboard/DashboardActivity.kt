@@ -46,6 +46,16 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import android.os.Handler
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.google.gson.Gson
+import com.swayze.smartintra.network.ViewModalFactory
+import com.swayze.smartintra.ui.attendance.AttendanceViewModel
+import com.swayze.smartintra.ui.pod_upload.PodUploadViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 
 
 class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -65,6 +75,8 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
 
     private var timerHandler: Handler? = null
     private var timerRunnable: Runnable? = null
+    private lateinit var viewModel: AttendanceViewModel
+    private var today: String = Utils.getDate("dd/MM/yyyy")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +88,8 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(this, binding.main, binding.toolbar, R.string.open_nav, R.string.close_nav)
         binding.main.addDrawerListener(toggle)
         toggle.syncState()
+        viewModel = ViewModelProvider(this, ViewModalFactory(application))[AttendanceViewModel::class.java]
+
         /*if(sharedPreference.getValueBoolean(Constant.CHECK_IN,false)!=null){
             checkIn = sharedPreference.getValueBoolean(Constant.CHECK_IN,false)
         }else{
@@ -91,13 +105,25 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
         binding.ivLogout.setOnClickListener(this)
         binding.ivAttendance.setOnClickListener(this)
 
+
+        setObservers()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getDateTime()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopTimer()
     }
 
     @SuppressLint("DefaultLocale")
-    override fun onResume() {
-        super.onResume()
+    private fun setData() {
         if(isNewDate()){
-            sharedPreference.save(Constant.CURRENT_DATE, Utils.getDate("dd-MM-yyyy"))
+            sharedPreference.save(Constant.CURRENT_DATE, Utils.getDate("dd/MM/yyyy"))
             sharedPreference.save(Constant.CHECK_IN, false)
             sharedPreference.save(Constant.CHECK_OUT, false)
             binding.tvCheckInTime.text = "--:--:--"
@@ -124,15 +150,57 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
                 binding.ivAttendance.visibility = View.INVISIBLE
             }else binding.ivAttendance.visibility = View.VISIBLE
 
-             binding.tvCheckInTime.text = if(isCheckInDone) Utils.getDate(sharedPreference.getValueLong(Constant.CHECK_IN_TIME,0L), "HH:mm:ss") else "--:--:--"
-             binding.tvCheckOutTime.text = if(isCheckOutDone) Utils.getDate(sharedPreference.getValueLong(Constant.CHECK_OUT_TIME,0L), "HH:mm:ss") else "--:--:--"
+            binding.tvCheckInTime.text = if(isCheckInDone) Utils.getDate(sharedPreference.getValueLong(Constant.CHECK_IN_TIME,0L), "HH:mm:ss") else "--:--:--"
+            binding.tvCheckOutTime.text = if(isCheckOutDone) Utils.getDate(sharedPreference.getValueLong(Constant.CHECK_OUT_TIME,0L), "HH:mm:ss") else "--:--:--"
         }
         resumeTimerIfNeeded()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        stopTimer()
+    private fun setObservers() {
+        viewModel.empAttendanceResponse.observe(this, Observer {
+            hideDialog()
+            val attendance = it ?: return@Observer
+            Log.d("respose",Gson().toJson(attendance))
+            if(attendance[0].Response.equals("Success")){
+                if(attendance[0].marktype.equals("IN", ignoreCase = true)){
+                    sharedPreference.save(Constant.CHECK_IN, true)
+                    sharedPreference.save(Constant.CHECK_IN_TIME, Utils.getTimeInMillis(attendance[0].marktime!!,"dd/MM/yyyy HH:mm:ss"))
+                    binding.tvCheckInTime.text = attendance[0].marktime?.substringAfter(" ")
+                    startTimer()
+
+                }else{
+                    sharedPreference.save(Constant.CHECK_OUT, true)
+                    binding.ivAttendance.visibility = View.INVISIBLE
+                    sharedPreference.save(Constant.CHECK_OUT_TIME, Utils.getTimeInMillis(attendance[0].marktime!!,"dd/MM/yyyy HH:mm:ss"))
+                    binding.tvCheckOutTime.text = attendance[0].marktime?.substringAfter(" ")
+                    stopTimer()
+                }
+                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText(getString(R.string.success))
+                    .setContentText(getString(R.string.your_attendance_done))
+                    .setConfirmClickListener { sDialog -> // reuse previous dialog instance
+                        sDialog.dismiss()
+                    }
+                    .show()
+            }else{
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText(getString(R.string.error))
+                    .setContentText(attendance[0].Response)
+                    .setConfirmClickListener { sDialog -> // reuse previous dialog instance
+                        sDialog.dismiss()
+                    }
+                    .show()
+            }
+        })
+
+        viewModel.getDateTimeResponse.observe(this, Observer {
+            hideDialog()
+            val attendance = it ?: return@Observer
+            today = attendance[0].currTime.substringBefore(" ")
+            binding.tvDayAndDate.text = Utils.getDayFromDate(attendance[0].currTime,"dd/MM/yyyy HH:mm:ss")
+            Log.d("respose",Gson().toJson(attendance))
+            setData()
+        })
     }
 
     override fun onNavigationItemSelected(menu: MenuItem): Boolean {
@@ -166,16 +234,16 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun isNewDate(): Boolean {
-        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val today = sdf.format(Date())
+        /*val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val today = sdf.format(Date())*/
         val savedDate = sharedPreference.getValueString(Constant.CURRENT_DATE)
 
         return today != savedDate
     }
 
     fun markAttendance() {
-        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val today = sdf.format(Date())
+        //val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        //val today = sdf.format(Date())
 
         val savedDate = sharedPreference.getValueString(Constant.CURRENT_DATE)
         var isCheckInDone = sharedPreference.getValueBoolean(Constant.CHECK_IN, false)
@@ -194,11 +262,13 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
 
         when {
             !isCheckInDone -> {
-                onCheckIn()
+                //onCheckIn()
+                markSalesAttendance("IN")
             }
 
             !isCheckOutDone -> {
-                onCheckOut()
+                markSalesAttendance("OUT")
+                //onCheckOut()
             }
 
             else -> {
@@ -209,22 +279,18 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun onCheckIn() {
         sharedPreference.save(Constant.CHECK_IN, true)
-        binding.tvCheckInTime.text = Utils.getDate("HH:mm:ss")
-        showToast("Check-In marked successfully")
-        val checkInTime = System.currentTimeMillis()
-        sharedPreference.save(Constant.CHECK_IN_TIME, checkInTime)
-        //sharedPreference.save(Constant.CHECK_IN, true)
+        markSalesAttendance("IN")
 
-        startTimer()
     }
 
     private fun onCheckOut() {
         sharedPreference.save(Constant.CHECK_OUT, true)
         binding.tvCheckOutTime.text = Utils.getDate("HH:mm:ss")
-        showToast("Check-Out marked successfully")
+        //showToast("Check-Out marked successfully")
         val checkInTime = System.currentTimeMillis()
         sharedPreference.save(Constant.CHECK_OUT_TIME, checkInTime)
         binding.ivAttendance.visibility = View.INVISIBLE
+        markSalesAttendance("OUT")
         //resumeTimerIfNeeded()
         stopTimer()
     }
@@ -287,6 +353,25 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
         binding.tvTimeSecond.text = String.format("%02d", seconds)
        // val time = String.format("%02d:%02d:%02d", hours, minutes, seconds)
         //binding.tvTimer.text = time
+    }
+
+    private fun markSalesAttendance(attenType: String) {
+        showDialog()
+        val file = File(path)
+        Log.d(TAG,"image_name : ${file.name}")
+        val filePart = MultipartBody.Part.createFormData(
+            "dataFile",
+            file.name,
+            RequestBody.create("image/*".toMediaTypeOrNull(), file)
+        )
+        viewModel.empAttendance(
+            filePart,
+            sharedPreference.getValueString(Constant.CID)?.let { getPart(it) },
+            sharedPreference.getValueString(Constant.BID)?.let { getPart(it) },
+            sharedPreference.getValueString(Constant.EMP_NO)?.let { getPart(it) },
+            getDeviceIMEIId(this)?.let { getPart(it)},
+            getPart(attenType)
+        )
     }
 
     override fun onClick(v: View?) {
@@ -426,7 +511,7 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
             compressedImage?.let {
                 try {
 
-                    markAttendance()
+
                     // Use BitmapFactory options to prevent OOM errors with large images
                     val options = BitmapFactory.Options().apply {
                         inSampleSize = 1 // No downsampling when displaying
@@ -455,6 +540,7 @@ class DashboardActivity : BaseActivity(), NavigationView.OnNavigationItemSelecte
                         "Compressed image size: ${String.format("%.2f", fileSizeInMB)} MB"
                     )
                     Log.d("final_path", path ?: "Path is null")
+                    markAttendance()
                 } catch (e: Exception) {
                     Log.e("ImageDisplay", "Error displaying image: ${e.message}", e)
                 }

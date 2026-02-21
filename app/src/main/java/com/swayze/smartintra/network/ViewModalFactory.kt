@@ -3,6 +3,7 @@ package com.swayze.smartintra.network
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModel
+import com.swayze.smartintra.ui.attendance.AttendanceViewModel
 import com.swayze.smartintra.ui.login.LoginViewModel
 import com.swayze.smartintra.ui.pod_upload.PodUploadViewModel
 import com.swayze.smartintra.ui.trip_sheet_printing.TripSheetViewModel
@@ -22,6 +23,8 @@ class ViewModalFactory(private val app: Application) : ViewModelProvider.Factory
             return VehicleLoadUnloadModel(app) as T
         }else if (modelClass.isAssignableFrom(PodUploadViewModel::class.java)) {
             return PodUploadViewModel(app) as T
+        }else if (modelClass.isAssignableFrom(AttendanceViewModel::class.java)) {
+            return AttendanceViewModel(app) as T
         }
         /*else if (modelClass.isAssignableFrom(TrackingViewModel::class.java)) {
             return TrackingViewModel() as T

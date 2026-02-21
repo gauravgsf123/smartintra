@@ -1,6 +1,8 @@
 package com.swayze.smartintra.network
 
 
+import com.swayze.smartintra.ui.attendance.AttendanceResponse
+import com.swayze.smartintra.ui.attendance.GetDateTimeResponse
 import com.swayze.smartintra.ui.login.LoginResponse
 import com.swayze.smartintra.ui.pod_upload.PODDelayReasonResponse
 import com.swayze.smartintra.ui.pod_upload.PodDateLimitResponse
@@ -232,4 +234,16 @@ interface Apis {
 
     @POST("operation/mDelReason.htm")
     suspend fun delayReason(@QueryMap body: Map<String, String>): List<PODDelayReasonResponse>
+
+    @Multipart
+    @POST("empAttendance")
+    suspend fun empAttendance(@Part file: MultipartBody.Part,
+                                 @Part("CID") cid: RequestBody?,
+                                 @Part("BID") bid: RequestBody?,
+                                 @Part("EMPNO") empNo: RequestBody?,
+                                 @Part("IMEINO") imeiNo: RequestBody?,
+                                 @Part("ATTTYPE") atttype: RequestBody?): List<AttendanceResponse>
+
+    @POST("getDateTime")
+    suspend fun getDateTime(): List<GetDateTimeResponse>
 }
